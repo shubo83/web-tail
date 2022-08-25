@@ -3,3 +3,6 @@
 web-tail
 .DS_Store
 bin/
+.vscode
+go.mod
+go.sum
