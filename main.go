@@ -23,10 +23,15 @@ func main() {
 	go ParseLogConfigFileLiPeriod()
 
 	router := gin.Default()
+
+	authorized := router.Group("/", gin.BasicAuth(gin.Accounts{
+		"user": "123456",
+	}))
+
 	// 加载模版文件
 	router.LoadHTMLGlob("tmpls/*")
 	// 日志查看页面
-	router.GET("/log", func(c *gin.Context) {
+	authorized.GET("/log", func(c *gin.Context) {
 		pathMd5, tailN := c.DefaultQuery(param_md5, logFiles.first), c.DefaultQuery(tail_n, "")
 		data := struct {
 			FS map[string]*LogFile
