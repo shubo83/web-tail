@@ -14,7 +14,10 @@ LOGLI=log.li
 # common 
 # default is mac
 build:
-	mkdir $(BINARY_NAME) && cd $(BINARY_NAME) && rm -rf $(OS_DIR) && mkdir $(OS_DIR)
+	if [ ! -d bin ]; then \
+		mkdir bin; \
+	fi
+	cd $(BINARY_NAME) && rm -rf $(OS_DIR) && mkdir $(OS_DIR)
 	$(GOENV) $(GOBUILD) -o $(BINARY_NAME)/$(OS_DIR)/$(NAME)
 	cp -r $(TMPLS) $(BINARY_NAME)/$(OS_DIR)/ && cp $(LOGLI) $(BINARY_NAME)/$(OS_DIR)
 	cd $(BINARY_NAME) && zip -rm $(OS_DIR).zip $(OS_DIR)
