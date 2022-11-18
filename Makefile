@@ -10,6 +10,7 @@ OS_DIR=$(MAC_DIR)
 
 TMPLS=tmpls
 LOGLI=log.li
+CONFIG=config
 
 # common 
 # default is mac
@@ -19,7 +20,7 @@ build:
 	fi
 	cd $(BINARY_NAME) && rm -rf $(OS_DIR) && mkdir $(OS_DIR)
 	$(GOENV) $(GOBUILD) -o $(BINARY_NAME)/$(OS_DIR)/$(NAME)
-	cp -r $(TMPLS) $(BINARY_NAME)/$(OS_DIR)/ && cp $(LOGLI) $(BINARY_NAME)/$(OS_DIR)
+	cp -r $(TMPLS) $(BINARY_NAME)/$(OS_DIR)/ && cp $(LOGLI) $(BINARY_NAME)/$(OS_DIR) && cp -r $(CONFIG) $(BINARY_NAME)/$(OS_DIR)/
 	cd $(BINARY_NAME) && zip -rm $(OS_DIR).zip $(OS_DIR)
 
 # linux

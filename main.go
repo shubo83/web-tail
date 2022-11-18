@@ -2,11 +2,23 @@ package main
 
 import (
 	"flag"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gopkg.in/yaml.v2"
 )
+
+type Config struct {
+	App App `yaml:"app"`
+}
+
+type App struct {
+	BasicAuthUsername string `yaml:"basic_auth_username"`
+	BasicAuthPassword string `yaml:"basic_auth_password"`
+}
 
 const (
 	tail_n    = "n"
@@ -16,7 +28,27 @@ const (
 
 var addr = flag.String("addr", ":8765", "http service address")
 
+func (config *Config) getConf() *Config {
+	//应该是 绝对地址
+	yamlFile, err := os.ReadFile("config/app.yaml")
+	if err != nil {
+		log.Println(err.Error())
+	}
+	err = yaml.Unmarshal(yamlFile, config)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return config
+}
+
 func main() {
+	var config Config
+	basic_auth_username := config.getConf().App.BasicAuthUsername
+	basic_auth_password := config.getConf().App.BasicAuthPassword
+
+	log.Println(basic_auth_username)
+	log.Println(basic_auth_password)
+
 	flag.Parse()
 
 	// 定时解析日志配置文件
@@ -25,7 +57,7 @@ func main() {
 	router := gin.Default()
 
 	authorized := router.Group("/", gin.BasicAuth(gin.Accounts{
-		"user": "123456",
+		basic_auth_username: basic_auth_password,
 	}))
 
 	// 加载模版文件

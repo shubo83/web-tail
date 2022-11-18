@@ -1,0 +1,3 @@
+app:
+  basic_auth_username: user
+  basic_auth_password: 123456
